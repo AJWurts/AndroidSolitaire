@@ -195,7 +195,7 @@ public class Card {
     }
 
     public boolean wasTouched(float x, float y) {
-        return !isFlipped && area.contains(x, y);
+        return area.contains(x, y);
     }
 
     public String toString() {

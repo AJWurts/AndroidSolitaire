@@ -2,16 +2,10 @@ package com.sigpit.alexwurts.solitare;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 
 import model.Card;
 import model.Deck;
@@ -60,18 +54,23 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
         Movement c;
 
         int action = event.getActionMasked();
-        switch(action) {
+        switch (action) {
             case MotionEvent.ACTION_DOWN:
                 if (!down) {
                     down = true;
                     c = deck.getMovement(event.getX(), event.getY());
                     if (c != null) {
-                        moving = c;
-                        initXY[0] = event.getX();
-                        initXY[1] = event.getY();
-                        originXY[0] = event.getX();
-                        originXY[1] = event.getY();
-                        shapeOriginXY = moving.getBase().getXY();
+                        if (c.getOrigPileIndex() == 7 && c.getBase().isFlipped()) {
+                            deck.incDeckCards();
+
+                        } else {
+                            moving = c;
+                            initXY[0] = event.getX();
+                            initXY[1] = event.getY();
+                            originXY[0] = event.getX();
+                            originXY[1] = event.getY();
+                            shapeOriginXY = moving.getBase().getXY();
+                        }
                     }
                 } else if (moving != null) {
                     float diffX = event.getX() - initXY[0];
@@ -95,13 +94,19 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
             case MotionEvent.ACTION_UP:
 
                 if (down && moving != null) {
-                    int index = deck.getClosestPile(event.getX(), event.getY());
-
-                    deck.addToPile(moving, index);
-                    if (index != moving.getOrigPileIndex() )
-                        deck.flipLastCard(moving.origPileIndex);
-
+                    int i = deck.getClosestValidPile(event.getX(),
+                            event.getY(),
+                            moving.getBase());
+                    if (i == -1) {
+                        deck.addToDeck(moving);
+                    } else {
+                        deck.addToPile(moving, i);
+                        if (i != moving.getOrigPileIndex())
+                            deck.flipLastCard(moving.getOrigPileIndex());
+                    }
                 }
+
+
 
                 // For manual flipping
 //                if (moving != null && Math.abs(event.getX() - originXY[0]) + Math.abs(event.getY() - originXY[1]) < 5) {
@@ -110,9 +115,11 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
 //                }
                 down = false;
                 moving = null;
-                initXY[0] = 0; initXY[1] = 0;
+                initXY[0] = 0;
+                initXY[1] = 0;
                 break;
         }
+
         drawCards();
         return true;
     }
@@ -121,7 +128,7 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
         Canvas canvas = getHolder().lockCanvas();
 
         canvas.drawColor(0xFF196636);
-        for (Card c: deck.getDrawOrder()) {
+        for (Card c : deck.getDrawOrder()) {
             c.drawCard(canvas);
         }
         getHolder().unlockCanvasAndPost(canvas);
@@ -129,7 +136,7 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
 
     public void drawCards(Canvas canvas) {
         canvas.drawColor(0xFF196636);
-        for (Card c: deck.getDrawOrder()) {
+        for (Card c : deck.getDrawOrder()) {
             c.drawCard(canvas);
         }
     }
