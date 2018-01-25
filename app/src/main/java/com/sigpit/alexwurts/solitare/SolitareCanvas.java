@@ -23,20 +23,13 @@ import model.Deck;
 public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
     private Deck deck = new Deck();
-    private ArrayList<Deck> piles = new ArrayList<>();
-    private Card moving;
+
+    private Movement moving;
     private boolean down = false;
     private float[] initXY = new float[2];
     private float[] originXY = new float[2];
     private float[] shapeOriginXY = new float[2];
 
-//    Handler handler = new Handler(Looper.getMainLooper());
-//    Runnable updateCards = new Runnable() {
-//        public void run() {
-//            drawCards();
-//            handler.postDelayed(this, 25);
-//        }
-//    };
 
     public SolitareCanvas(Context context) {
         super(context);
@@ -64,49 +57,58 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
     }
 
     public boolean onTouchEvent(MotionEvent event) {
-        Card c;
+        Movement c;
 
         int action = event.getActionMasked();
         switch(action) {
             case MotionEvent.ACTION_DOWN:
                 if (!down) {
                     down = true;
-                    c = deck.anyTouched(event.getX(), event.getY());
+                    c = deck.getMovement(event.getX(), event.getY());
                     if (c != null) {
                         moving = c;
                         initXY[0] = event.getX();
                         initXY[1] = event.getY();
                         originXY[0] = event.getX();
                         originXY[1] = event.getY();
-                        shapeOriginXY = c.getXY();
+                        shapeOriginXY = moving.getBase().getXY();
                     }
                 } else if (moving != null) {
                     float diffX = event.getX() - initXY[0];
                     float diffY = event.getY() - initXY[1];
-                    float[] old = moving.getXY();
-                    moving.setXY(old[0] + diffX, old[1] + diffY);
+                    float[] old = moving.getBase().getXY();
+                    moving.move(old[0] + diffX, old[1] + diffY);
                     initXY = old;
-                    deck.updateCard(moving);
+                    deck.updateCards(moving);
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (down && moving != null) {
                     float diffX = event.getX() - initXY[0];
                     float diffY = event.getY() - initXY[1];
-                    float[] old = moving.getXY();
-                    moving.setXY(old[0] + diffX, old[1] + diffY);
+                    moving.move(diffX, diffY);
                     initXY[0] = event.getX();
                     initXY[1] = event.getY();
-                    deck.updateCard(moving);
+                    deck.updateCards(moving);
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                down = false;
 
-                if (moving != null && Math.abs(event.getX() - originXY[0]) + Math.abs(event.getY() - originXY[1]) < 5) {
-                    moving.flip();
-                    moving.setXY(shapeOriginXY);
+                if (down && moving != null) {
+                    int index = deck.getClosestPile(event.getX(), event.getY());
+
+                    deck.addToPile(moving, index);
+                    if (index != moving.getOrigPileIndex() )
+                        deck.flipLastCard(moving.origPileIndex);
+
                 }
+
+                // For manual flipping
+//                if (moving != null && Math.abs(event.getX() - originXY[0]) + Math.abs(event.getY() - originXY[1]) < 5) {
+//                    moving.flip();
+//                    moving.setXY(shapeOriginXY);
+//                }
+                down = false;
                 moving = null;
                 initXY[0] = 0; initXY[1] = 0;
                 break;
@@ -130,6 +132,24 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
         for (Card c: deck.getDrawOrder()) {
             c.drawCard(canvas);
         }
+    }
+
+    public void initCanvas() {
+        Canvas canvas = getHolder().lockCanvas();
+        int width = canvas.getWidth();
+        int height = canvas.getHeight();
+
+        Card.SIZE_X = width * 0.10f;
+        Card.SIZE_Y = Card.SIZE_X * 1.4f;
+
+        Card.HALF_X = Card.SIZE_X / 2;
+        Card.HALF_Y = Card.SIZE_Y / 2;
+
+        canvas.drawColor(0xFF196636);
+
+//        deck.loadSolitare(width / 2, height / 2 - height * 0.30f);
+        drawCards(canvas);
+        getHolder().unlockCanvasAndPost(canvas);
     }
 
     public void drawSolitare() {
@@ -157,7 +177,7 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
-        drawSolitare();
+        initCanvas();
     }
 
     @Override

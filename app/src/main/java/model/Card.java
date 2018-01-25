@@ -195,7 +195,7 @@ public class Card {
     }
 
     public boolean wasTouched(float x, float y) {
-        return area.contains(x, y);
+        return !isFlipped && area.contains(x, y);
     }
 
     public String toString() {
@@ -228,4 +228,23 @@ public class Card {
         suitColor.setTextSize(SIZE_Y * 0.25f);
     }
 
+    public float getY() {
+        return y;
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+
+    public boolean equals(Object other) {
+        return toString().equals(other.toString());
+    }
 }
