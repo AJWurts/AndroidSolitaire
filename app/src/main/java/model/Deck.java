@@ -1,5 +1,6 @@
 package model;
 
+import com.sigpit.alexwurts.solitare.LeftoverPile;
 import com.sigpit.alexwurts.solitare.Movement;
 import com.sigpit.alexwurts.solitare.Pile;
 
@@ -40,7 +41,7 @@ public class Deck {
     private ArrayList<Card> cards = new ArrayList<Card>();
     private LinkedList<Card> drawOrder = new LinkedList<>();
 
-    private ArrayList<Pile> piles = new ArrayList<Pile>();
+    protected ArrayList<Pile> piles = new ArrayList<Pile>();
     // Decks 0-6 for rows, 7 is leftover, 8-11 is aces positions
     private ArrayList<Card> movementHolder = new ArrayList<>();
 
@@ -52,7 +53,11 @@ public class Deck {
         }
 
         for (int i = 0; i < 12; i++) {
-            piles.add(new Pile(i));
+            if (i == 7) {
+                piles.add(new LeftoverPile(i));
+            } else {
+                piles.add(new Pile(i));
+            }
         }
 
     }
@@ -78,14 +83,14 @@ public class Deck {
     public int getClosestValidPile(float x, float y, Card c) {
         float minDist = -1, dist;
         int closeIndex = -1;
-        float[] coords;
         for (int i = 0; i < piles.size(); i++) {
             dist = piles.get(i).distFrom(x, y);
 
             if ((minDist == -1 || dist < minDist)
                     && (((c.num == Deck.KING) && piles.get(i).size() == 0 && 0 <= i && i <= 6)
                     || (c.num == Deck.ACE && piles.get(i).size() == 0 && 8 <= i && i <= 11)
-                    || (piles.get(i).size() > 0 && 0 <= i && i <= 6 && piles.get(i).validNextCard(c)))
+                    || (piles.get(i).size() > 0 && ((8 <= i && i <= 11) || (0 <= i && i <= 6))
+                    && piles.get(i).validNextCard(c)))
             ){
                 closeIndex = i;
                 minDist = dist;
@@ -134,10 +139,7 @@ public class Deck {
     }
 
     public void addToPile(Movement m, int pileNum) {
-        Pile pile = piles.get(pileNum);
-        float[] coords = pile.getLastCoords();
-        m.setXY(coords[0], coords[1]);
-        piles.get(pileNum).addCards(m.getBelow());
+        piles.get(pileNum).addCards(m);
     }
 
     public void updateCard(Card c) {
@@ -191,6 +193,8 @@ public class Deck {
         for (; i < drawOrder.size(); i++) {
             c = drawOrder.get(i);
             piles.get(7).addCard(c);
+            piles.get(7).setXY(cX - (SIZE_X * (GAP * 3f)) + (SIZE_X * (GAP * 6f)),
+                    cY - Card.SIZE_Y * 1.5f);
             c.setXY(cX - (SIZE_X * (GAP * 3f)) + (SIZE_X * (GAP * 6f)),
                     cY - Card.SIZE_Y * 1.5f);
             c.setFlipped(true);
@@ -201,7 +205,8 @@ public class Deck {
             piles.get(j).setXY(cX - (SIZE_X * (GAP * 3f)) + (SIZE_X * GAP * (j - 8f)),
                     cY - SIZE_Y * 1.5f);
         }
-        incDeckCards();
+        ((LeftoverPile)piles.get(7)).incPile();
+
     }
 
     public void addCard(Card c) {
@@ -215,18 +220,20 @@ public class Deck {
     }
 
     public void incDeckCards() {
-        Card c = piles.get(7).getLast();
-        c.setFlipped(false);
-        c.setXY(c.getX() - Card.SIZE_X * 1.5f, c.getY());
-        updateCard(c);
+        Card c = ((LeftoverPile)piles.get(7)).incPile();
+        if (c != null)
+            updateCard(c);
     }
 
-    public void addToDeck(Movement m) {
-        Pile pile = piles.get(7);
-        float[] coords = pile.getLastCoords();
-        m.setXY(coords[0], coords[1]);
-        piles.get(7).addCards(m.getBelow());
-        incDeckCards();
+    public void addToDeck(Movement m, int i) {
+        piles.get(i).addToDeck(m);
     }
 
+    public ArrayList<Pile> getPiles() {
+        return piles;
+    }
+
+    public boolean onPile(int pileNum, float[] xy) {
+        return piles.get(pileNum).contains(xy);
+    }
 }
