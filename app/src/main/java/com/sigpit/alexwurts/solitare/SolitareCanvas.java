@@ -68,6 +68,8 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
                         initXY[1] = event.getY();
                         originXY[0] = event.getX();
                         originXY[1] = event.getY();
+                    } else if (c != null ){
+                        deck.addToDeck(c, c.getOrigPileIndex());
                     }
                 }  else if ( deck.onPile(7, new float[] {event.getX(), event.getY()})) {
                     deck.incDeckCards();
@@ -96,6 +98,7 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
                     int i = deck.getClosestValidPile(event.getX(),
                             event.getY(),
                             moving.getBase());
+
                     if (i == -1 || (8 <= i && i <= 11)) {
                         if (i == -1)
                             i = 7;

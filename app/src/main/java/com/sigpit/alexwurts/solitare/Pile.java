@@ -116,17 +116,19 @@ public class Pile {
 
     public boolean validNextCard(Card c) {
         Card last = getLast();
-        if (last.isFlipped()) {
+        if (last != null && last.isFlipped()) {
             return true;
-        } else
-          return (((c.suit == 'c' || c.suit == 's')
+        } else if (last != null) {
+            return (((c.suit == 'c' || c.suit == 's')
                     && (last.suit == 'h' || last.suit == 'd'))
                     || ((c.suit == 'h' || c.suit == 'd') &&
-                        (last.suit == 'c' || last.suit == 's')))
+                    (last.suit == 'c' || last.suit == 's')))
                     && (last.num - 1 == c.num)
 
-                  || (8 <= id && id <= 11 && c.suit == last.suit
-                        && c.num - 1 == last.num);
+                    || (8 <= id && id <= 11 && c.suit == last.suit
+                    && c.num - 1 == last.num);
+        }
+        return false;
     }
 
     public float distFrom(float x, float y) {

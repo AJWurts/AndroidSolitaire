@@ -22,7 +22,7 @@ public class LeftoverPile extends Pile {
         if (numLeft == 0) {
             numLeft = size();
             resetPile();
-            incPile();
+//            incPile();
         } else {
             Card c = cards.get(numLeft - 1);
             c.setFlipped(false);

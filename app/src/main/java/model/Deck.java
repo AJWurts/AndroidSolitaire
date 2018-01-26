@@ -86,12 +86,11 @@ public class Deck {
         for (int i = 0; i < piles.size(); i++) {
             dist = piles.get(i).distFrom(x, y);
 
-            if ((minDist == -1 || dist < minDist)
-                    && (((c.num == Deck.KING) && piles.get(i).size() == 0 && 0 <= i && i <= 6)
-                    || (c.num == Deck.ACE && piles.get(i).size() == 0 && 8 <= i && i <= 11)
-                    || (piles.get(i).size() > 0 && ((8 <= i && i <= 11) || (0 <= i && i <= 6))
-                    && piles.get(i).validNextCard(c)))
-            ){
+            if ((minDist == -1 || dist <= minDist)
+                    &&  (((piles.get(i).size() > 0 && ((8 <= i && i <= 11) || (0 <= i && i <= 6)))) && piles.get(i).validNextCard(c))
+                    ||  (((c.num == Deck.KING) && piles.get(i).size() == 0 && 0 <= i && i <= 6)
+                            || (c.num == Deck.ACE && piles.get(i).size() == 0 && 8 <= i && i <= 11)))
+            {
                 closeIndex = i;
                 minDist = dist;
             }
@@ -105,7 +104,7 @@ public class Deck {
         for (int i = drawOrder.size() - 1; i >= 0; i--) {
 
             if (drawOrder.get(i).wasTouched(x, y)) {
-                return getMovement(drawOrder.get(i));
+                 return getMovement(drawOrder.get(i));
             }
         }
         return null;
