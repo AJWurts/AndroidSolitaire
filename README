@@ -1,17 +1,17 @@
-Card Simulator
+Solitare
 by Alexander Wurts
 
-An application that allows a user to play with cards on screen or play solitare.
+An application that allows a user to play solitare.
 Work in progress
 
 Features to add:
 -Timing for Solitare
--Scoring for Solitare
--Placement snapping
--automatic flipping
--automatic deck card handling
--Save state between app restarts
--when moving a pile take all cards below too
+-Scoring for Solitare 
+-Placement snapping - Added
+-automatic flipping - Added
+-automatic deck card handling 
+-Save state between app restarts - Only for soft restarts, not full restarts
+-when moving a pile take all cards below too - ADded
 -possibly more game types
   -3 card draw
   -Possible use of edge screen on samsung devices for games where you shouldnt see other players cards
