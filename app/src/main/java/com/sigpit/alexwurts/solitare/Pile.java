@@ -119,17 +119,19 @@ public class Pile {
         if (last != null && last.isFlipped()) {
             return true;
         } else if (last != null) {
-            return (((c.suit == 'c' || c.suit == 's')
+            return ((((c.suit == 'c' || c.suit == 's')
                     && (last.suit == 'h' || last.suit == 'd'))
                     || ((c.suit == 'h' || c.suit == 'd') &&
                     (last.suit == 'c' || last.suit == 's')))
-                    && (last.num - 1 == c.num)
+                    && (last.num - 1 == c.num) && (0 <= id && id <= 6))
 
                     || (8 <= id && id <= 11 && c.suit == last.suit
                     && c.num - 1 == last.num);
         }
         return false;
     }
+
+
 
     public float distFrom(float x, float y) {
         return (float) Math.hypot(getLastCoords()[0] - x, getLastCoords()[1]- y);
