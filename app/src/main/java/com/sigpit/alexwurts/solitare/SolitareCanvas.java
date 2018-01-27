@@ -7,10 +7,10 @@ import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 
-import java.util.Collection;
-
 import model.Card;
 import model.Deck;
+import model.Movement;
+import model.Pile;
 
 /**
  * Created by Sigpit on 1/21/2018.
@@ -21,6 +21,7 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
     private Deck deck = new Deck();
 
     private Movement moving;
+    private boolean isSolitareLoaded = true;
     private boolean down = false;
     private float[] initXY = new float[2];
     private float[] originXY = new float[2];
@@ -56,6 +57,10 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
     public boolean onTouchEvent(MotionEvent event) {
         Movement c;
 
+        if (!isSolitareLoaded) {
+            return false;
+        }
+
         int action = event.getActionMasked();
         switch (action) {
             case MotionEvent.ACTION_DOWN:
@@ -69,7 +74,7 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
                         originXY[0] = event.getX();
                         originXY[1] = event.getY();
                     } else if (c != null ){
-                        deck.addToDeck(c, c.getOrigPileIndex());
+                        deck.addToPile(c, c.getOrigPileIndex());
                     }
                 }  else if ( deck.onPile(7, new float[] {event.getX(), event.getY()})) {
                     deck.incDeckCards();
@@ -99,18 +104,11 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
                             event.getY(),
                             moving.getBase());
 
-                    if (i == -1 || (8 <= i && i <= 11)) {
-                        if (i == -1)
-                            i = 7;
-                        else
-                            deck.flipLastCard(moving.getOrigPileIndex());
-                        deck.addToDeck(moving, i);
-                    } else {
-                        deck.addToPile(moving, i);
-                        if (i != moving.getOrigPileIndex())
-                            deck.flipLastCard(moving.getOrigPileIndex());
-                    }
+                    deck.addToPile(moving, i);
+                    if (i != moving.getOrigPileIndex())
+                        deck.flipLastCard(moving.getOrigPileIndex());
                 }
+
 
 
 

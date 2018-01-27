@@ -1,9 +1,6 @@
-package com.sigpit.alexwurts.solitare;
+package model;
 
 import java.util.ArrayList;
-import java.util.Collection;
-
-import model.Card;
 
 /**
  * Created by Sigpit on 1/25/2018.
@@ -42,7 +39,7 @@ public class LeftoverPile extends Pile {
         }
     }
 
-    public void addToDeck(Movement m) {
+    public void addCards(Movement m) {
         float[] base = getCoords();
         for (Card c: m.getBelow()) {
             c.setXY(base[0] - Card.SIZE_X * 1.5f, base[1]);
@@ -51,13 +48,17 @@ public class LeftoverPile extends Pile {
     }
 
     public void flipLast() {
-        //incPile();
+        incPile();
+
     }
 
     public ArrayList<Card> getAfter(Card c) {
-        ArrayList<Card> out = new ArrayList<Card>();
-        out.add(c);
-        return out;
+        below.clear();
+        below.add(c);
+        return below;
     }
 
+    public boolean validNextCard(Card c) {
+        return below.contains(c);
+    }
 }

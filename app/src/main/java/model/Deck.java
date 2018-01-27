@@ -1,13 +1,8 @@
 package model;
 
-import com.sigpit.alexwurts.solitare.LeftoverPile;
-import com.sigpit.alexwurts.solitare.Movement;
-import com.sigpit.alexwurts.solitare.Pile;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.PriorityQueue;
 
 import static model.Card.SIZE_X;
 import static model.Card.SIZE_Y;
@@ -53,10 +48,12 @@ public class Deck {
         }
 
         for (int i = 0; i < 12; i++) {
-            if (i == 7) {
+            if (0 <= i && i <= 6) {
+               piles.add(new PlayPile(i));
+            } else if (i == 7){
                 piles.add(new LeftoverPile(i));
-            } else {
-                piles.add(new Pile(i));
+            } else if (8 <= i && i <= 11) {
+                piles.add(new AcePile(i));
             }
         }
 
@@ -84,19 +81,17 @@ public class Deck {
         float minDist = -1, dist;
         int closeIndex = -1;
         for (int i = 0; i < piles.size(); i++) {
-            dist = piles.get(i).distFrom(x, y);
+            if (piles.get(i).validNextCard(c)) {
+                dist = piles.get(i).distFrom(x, y);
 
-            if ((minDist == -1 || dist < minDist)
-                    &&  ((((piles.get(i).size() > 0 && ((8 <= i && i <= 11) || (0 <= i && i <= 6)))) && piles.get(i).validNextCard(c))
-                    ||  ((c.num == Deck.KING) && piles.get(i).size() == 0 && 0 <= i && i <= 6)
-                            || (c.num == Deck.ACE && piles.get(i).size() == 0 && 8 <= i && i <= 11)))
-            {
-                closeIndex = i;
-                minDist = dist;
+                if ((minDist == -1 || dist < minDist)) {
+                    closeIndex = i;
+                    minDist = dist;
+                }
             }
-
         }
         return closeIndex;
+
     }
 
     public Movement getMovement(float x, float y) {
@@ -222,10 +217,6 @@ public class Deck {
         Card c = ((LeftoverPile)piles.get(7)).incPile();
         if (c != null)
             updateCard(c);
-    }
-
-    public void addToDeck(Movement m, int i) {
-        piles.get(i).addToDeck(m);
     }
 
     public ArrayList<Pile> getPiles() {

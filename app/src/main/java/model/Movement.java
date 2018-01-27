@@ -1,4 +1,4 @@
-package com.sigpit.alexwurts.solitare;
+package model;
 
 import android.graphics.Canvas;
 

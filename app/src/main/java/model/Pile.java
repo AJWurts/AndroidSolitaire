@@ -1,4 +1,4 @@
-package com.sigpit.alexwurts.solitare;
+package model;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -7,16 +7,15 @@ import android.graphics.RectF;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import model.Card;
-
 import static model.Card.SIZE_Y;
 
 /**
  * Created by Sigpit on 1/24/2018.
  */
 
-public class Pile {
+abstract public class Pile {
     protected ArrayList<Card> cards = new ArrayList<Card>();
+    protected ArrayList<Card> below = new ArrayList<>();
     private float x = -1;
     private float y = -1;
     private int id;
@@ -37,9 +36,6 @@ public class Pile {
         cards.removeAll(c);
     }
 
-    public void addCards(Collection<Card> c) {
-        cards.addAll(c);
-    }
 
     public void setXY(float x, float y) {
         this.x = x;
@@ -78,27 +74,13 @@ public class Pile {
         return area.contains(xy[0], xy[1]);
     }
 
-    public ArrayList<Card> getAfter(Card c) {
-        ArrayList<Card> out = new ArrayList<Card>();
-        boolean collecting = false;
-        for (int i = 0; i < cards.size(); i++) {
-            if (collecting || cards.get(i).equals(c)) {
-                collecting = true;
-                out.add(cards.get(i));
-            }
-        }
-        return out;
-    }
+    abstract public ArrayList<Card> getAfter(Card c);
 
     public int size() {
         return cards.size();
     }
 
-    public void flipLast() {
-        Card last = getLast();
-        if (last != null)
-           getLast().setFlipped(false);
-    }
+    abstract public void flipLast();
 
     public void resetPile() {
         float x = -1;
@@ -114,24 +96,7 @@ public class Pile {
         }
     }
 
-    public boolean validNextCard(Card c) {
-        Card last = getLast();
-        if (last != null && last.isFlipped()) {
-            return true;
-        } else if (last != null) {
-            return ((((c.suit == 'c' || c.suit == 's')
-                    && (last.suit == 'h' || last.suit == 'd'))
-                    || ((c.suit == 'h' || c.suit == 'd') &&
-                    (last.suit == 'c' || last.suit == 's')))
-                    && (last.num - 1 == c.num) && (0 <= id && id <= 6))
-
-                    || (8 <= id && id <= 11 && c.suit == last.suit
-                    && c.num - 1 == last.num);
-        }
-        return false;
-    }
-
-
+    abstract public boolean validNextCard(Card c);
 
     public float distFrom(float x, float y) {
         return (float) Math.hypot(getLastCoords()[0] - x, getLastCoords()[1]- y);
@@ -145,24 +110,9 @@ public class Pile {
         canvas.drawRect(area, p);
     }
 
-    public void addCards(Movement m) {
-        float[] base = getNextOpenCoords();
-        for (Card c: m.getBelow()) {
-            c.setXY(base[0], base[1]);
-            base[1] += SIZE_Y * 0.3f;
-            addCard(c);
-        }
-    }
+    abstract public void addCards(Movement m);
 
-    public void addToDeck(Movement m) {
-        float[] base = getCoords();
-        for (Card c: m.getBelow()) {
-            c.setXY(base[0], base[1]);
-            addCard(c);
-        }
-    }
-
-    private float[] getNextOpenCoords() {
+    protected float[] getNextOpenCoords() {
         if (size() == 0) {
             return new float[] {x, y};
         } else {
@@ -173,7 +123,6 @@ public class Pile {
     }
 
     public float[] getXY() {
-
         return new float[] {x, y};
     }
 }
