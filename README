@@ -5,7 +5,7 @@ An application that allows a user to play solitare.
 Work in progress
 
 Features to add:
--Timing for Solitare
+-Timing for Solitare 
 -Scoring for Solitare 
 -Placement snapping - Added
 -automatic flipping - Added
@@ -15,4 +15,8 @@ Features to add:
 -possibly more game types
   -3 card draw
   -Possible use of edge screen on samsung devices for games where you shouldnt see other players cards
+-Full Commenting
+-Testing for androidTest
+-Complete writing test cases for all Model Classes
+
   
