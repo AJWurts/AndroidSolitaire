@@ -7,9 +7,7 @@ import java.util.LinkedList;
 import static model.Card.SIZE_X;
 import static model.Card.SIZE_Y;
 
-/**
- * Created by Sigpit on 1/21/2018.
- */
+
 
 public class Deck {
 
@@ -32,11 +30,9 @@ public class Deck {
     public static final int SPADES = 1;
     public static final int DIAMONDS = 2;
     public static final int CLUBS = 3;
-
-    private ArrayList<Card> cards = new ArrayList<Card>();
+    protected ArrayList<Pile> piles = new ArrayList<>();
+    private ArrayList<Card> cards = new ArrayList<>();
     private LinkedList<Card> drawOrder = new LinkedList<>();
-
-    protected ArrayList<Pile> piles = new ArrayList<Pile>();
     // Decks 0-6 for rows, 7 is leftover, 8-11 is aces positions
     private ArrayList<Card> movementHolder = new ArrayList<>();
 
@@ -49,39 +45,43 @@ public class Deck {
 
         for (int i = 0; i < 12; i++) {
             if (0 <= i && i <= 6) {
-               piles.add(new PlayPile(i));
-            } else if (i == 7){
+                piles.add(new PlayPile());
+            } else if (i == 7) {
+                piles.add(new LeftoverPile());
+            } else if (8 <= i && i <= 11) {
+                piles.add(new AcePile());
+            }
+        }
+
+    }
+
+    public Deck(int testVar) {
+        for (char s : SUITS) {
+            for (int i = 1; i <= 13; i++) {
+                cards.add(new Card(s, i, true, 0));
+            }
+        }
+
+        for (int i = 0; i < 12; i++) {
+            if (0 <= i && i <= 6) {
+                piles.add(new PlayPile(i));
+            } else if (i == 7) {
                 piles.add(new LeftoverPile(i));
             } else if (8 <= i && i <= 11) {
                 piles.add(new AcePile(i));
             }
         }
-
     }
 
     public void shuffle() {
         Collections.shuffle(drawOrder);
     }
 
-    public Card getCard(char s, int num) {
-        switch ((int)s) {
-            case HEARTS:
-                return cards.get(num);
-            case SPADES:
-                return cards.get(13 * SPADES + num);
-            case DIAMONDS:
-                return cards.get(13 * DIAMONDS + num);
-            case CLUBS:
-                return cards.get(13 * CLUBS + num);
-        }
-        return cards.get(0);
-    }
-
-    public int getClosestValidPile(float x, float y, Card c) {
+    public int getClosestValidPile(float x, float y, Movement m) {
         float minDist = -1, dist;
         int closeIndex = -1;
         for (int i = 0; i < piles.size(); i++) {
-            if (piles.get(i).validNextCard(c)) {
+            if (piles.get(i).validNextCard(m)) {
                 dist = piles.get(i).distFrom(x, y);
 
                 if ((minDist == -1 || dist < minDist)) {
@@ -103,24 +103,6 @@ public class Deck {
             }
         }
         return null;
-    }
-
-    private Movement getMovement(Card c) {
-        movementHolder.clear();
-        int i;
-        boolean found = false;
-        for (i = 0; i < piles.size(); i++) {
-            if (piles.get(i).contains(c)) {
-                movementHolder = piles.get(i).getAfter(c);
-                found = true;
-                break;
-            }
-        }
-        if (found) {
-            piles.get(i).removeCards(movementHolder);
-            return new Movement(c, (ArrayList<Card>) movementHolder.clone(), i);
-        } else
-            return null;
     }
 
     public Card getCard(int s, int num) {
@@ -207,12 +189,6 @@ public class Deck {
         drawOrder.addLast(c);
     }
 
-    private void clearPiles() {
-        for (Pile p: piles) {
-            p.clear();
-        }
-    }
-
     public void incDeckCards() {
         Card c = ((LeftoverPile)piles.get(7)).incPile();
         if (c != null)
@@ -226,4 +202,39 @@ public class Deck {
     public boolean onPile(int pileNum, float[] xy) {
         return piles.get(pileNum).contains(xy);
     }
+
+    private Movement getMovement(Card c) {
+        movementHolder.clear();
+        int i;
+        boolean found = false;
+        for (i = 0; i < piles.size(); i++) {
+            if (piles.get(i).contains(c)) {
+                movementHolder = piles.get(i).getAfter(c);
+                found = true;
+                break;
+            }
+        }
+        if (found) {
+            piles.get(i).removeCards(movementHolder);
+            return new Movement(c, (ArrayList<Card>) movementHolder.clone(), i);
+        } else
+            return null;
+    }
+
+    private void clearPiles() {
+        for (Pile p : piles) {
+            p.clear();
+        }
+    }
+
+    public boolean hasFinished() {
+        boolean isFinished = true;
+
+        for (int i = 8; i < 11; i++) {
+            isFinished &= ((AcePile) piles.get(i)).isComplete();
+        }
+
+        return isFinished;
+    }
+
 }

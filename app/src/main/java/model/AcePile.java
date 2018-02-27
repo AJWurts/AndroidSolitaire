@@ -2,22 +2,24 @@ package model;
 
 import java.util.ArrayList;
 
-/**
- * Created by Sigpit on 1/26/2018.
- */
 
 public class AcePile extends Pile {
 
-    public AcePile(int id) {
-        super(id);
+    AcePile() {
+        super();
     }
 
-    public boolean validNextCard(Card c) {
+    AcePile(int testVar) {
+        super(testVar);
+    }
+
+    public boolean validNextCard(Movement m) {
         Card last = getLast();
-        return (last == null && c.num == Deck.ACE) ||
-                (last != null && c.suit == last.suit && c.num - 1 == last.num);
+        Card c = m.getBase();
+        return ((last == null && c.num == Deck.ACE) ||
+                (last != null && c.suit == last.suit && c.num - 1 == last.num))
+                && m.getBelow().size() == 1;
     }
-
 
     public void addCards(Movement m) {
         float[] base = getCoords();
@@ -37,4 +39,9 @@ public class AcePile extends Pile {
         // do nothing
     }
 
+    public boolean isComplete() {
+        Card last = getLast();
+        return last != null && getLast().num == Deck.KING;
+    }
 }
+

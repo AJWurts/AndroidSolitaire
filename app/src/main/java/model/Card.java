@@ -1,42 +1,29 @@
 package model;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.Typeface;
-import android.graphics.drawable.shapes.RoundRectShape;
 
-import com.sigpit.alexwurts.solitare.R;
 
-/**
- * Created by Sigpit on 1/21/2018.
- */
 
 public class Card {
-    public final char suit;
-    public final int num;
-    private Paint suitColor;
-    private Paint backgroundColor;
-    private Paint borderColor;
-    private Paint backColor;
-    private RectF area;
-//    private Path heart;
-//    private Path club;
-//    private Path spade;
-//    private Path diamond;
-
     public static float SIZE_X = 250 / 2;
     public static float HALF_X = SIZE_X / 2;
     public static float SIZE_Y = 350 / 2;
     public static float HALF_Y = SIZE_Y / 2;
 
-
-    private boolean isFlipped = false;
-
+    public final char suit;
+    public final int num;
     float x, y;
-    Typeface consolas;
+    private Typeface consolas;
+    private Paint suitColor;
+    private Paint backgroundColor;
+    private Paint borderColor;
+    private Paint backColor;
+    private RectF area;
+    private boolean isFlipped = false;
 
     public Card(char suit, int num) {
         this.suit = suit;
@@ -71,6 +58,24 @@ public class Card {
         this.isFlipped = isFlipped;
     }
 
+    public Card(char suit, int num, int testVar) {
+        this.suit = suit;
+        this.num = num;
+    }
+
+    public Card(char suit, int num, boolean isFlipped, int testVar) {
+        this(suit, num, testVar);
+        this.isFlipped = isFlipped;
+    }
+
+    public boolean equals(Object other) {
+        return toString().equals(other.toString());
+    }
+
+    public String toString() {
+        return String.format("%c%d", suit, num);
+    }
+
     public void drawCard(Canvas canvas, float centerX, float centerY) {
         int r = 10; // corners radius
         area = new RectF(centerX - HALF_X, centerY - HALF_Y,
@@ -79,11 +84,11 @@ public class Card {
         canvas.drawRoundRect(area, r, r, borderColor);
         if (!isFlipped) {
             if (num == 10) {
-                canvas.drawText(getString(), centerX - SIZE_X * 0.47f, centerY - SIZE_Y * 0.28f, suitColor);
-                canvas.drawText(getString(), centerX + SIZE_X * 0.08f, centerY + SIZE_Y * 0.45f, suitColor);
+                canvas.drawText(getChar(), centerX - SIZE_X * 0.47f, centerY - SIZE_Y * 0.28f, suitColor);
+                canvas.drawText(getChar(), centerX + SIZE_X * 0.08f, centerY + SIZE_Y * 0.45f, suitColor);
             } else {
-                canvas.drawText(getString(), centerX - SIZE_X * 0.44f, centerY - SIZE_Y * 0.28f, suitColor);
-                canvas.drawText(getString(), centerX + SIZE_X * 0.20f, centerY + SIZE_Y * 0.45f, suitColor);
+                canvas.drawText(getChar(), centerX - SIZE_X * 0.44f, centerY - SIZE_Y * 0.28f, suitColor);
+                canvas.drawText(getChar(), centerX + SIZE_X * 0.20f, centerY + SIZE_Y * 0.45f, suitColor);
             }
             drawIcon(canvas, centerX + SIZE_X * 0.33f, centerY - SIZE_Y * 0.38f);
             drawIcon(canvas, centerX - SIZE_X * 0.33f, centerY + SIZE_Y * 0.35f);
@@ -98,7 +103,7 @@ public class Card {
         drawCard(canvas, x, y);
     }
 
-    public String getString() {
+    public String getChar() {
         if (2 <= num && num <= 10) {
             return Integer.toString(num);
         }
@@ -117,6 +122,52 @@ public class Card {
 
     public void flip() {
         isFlipped = !isFlipped;
+    }
+
+    public boolean wasTouched(float x, float y) {
+        return !isFlipped && area.contains(x, y);
+    }
+
+    public void setXY(float x, float y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public float[] getXY() {
+        return new float[]{x, y};
+    }
+
+    public void setXY(float[] xy) {
+        x = xy[0];
+        y = xy[1];
+    }
+
+    public boolean isFlipped() {
+        return isFlipped;
+    }
+
+    public void setFlipped(boolean flipped) {
+        isFlipped = flipped;
+    }
+
+    public void updateTextSize() {
+        suitColor.setTextSize(SIZE_Y * 0.25f);
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public void setX(float x) {
+        this.x = x;
     }
 
     private void drawIcon(Canvas canvas, float centerX, float centerY) {
@@ -182,7 +233,7 @@ public class Card {
                 canvas.drawCircle(centerX, centerY - SIZE_Y * 0.06f, r3, suitColor);
                 canvas.drawCircle(centerX, centerY, r3, suitColor);
 
-            }
+        }
 
     }
 
@@ -192,59 +243,5 @@ public class Card {
         } else {
             return 0xFFFF0000;
         }
-    }
-
-    public boolean wasTouched(float x, float y) {
-        return !isFlipped && area.contains(x, y);
-    }
-
-    public String toString() {
-        return String.format("%c%d", suit, num);
-    }
-
-    public void setXY(float x, float y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public void setXY(float[] xy) {
-        x = xy[0];
-        y = xy[1];
-    }
-
-    public float[] getXY() {
-        return new float[] {x, y};
-    }
-
-    public boolean isFlipped() {
-        return isFlipped;
-    }
-
-    public void setFlipped(boolean flipped) {
-        isFlipped = flipped;
-    }
-
-    public void updateTextSize() {
-        suitColor.setTextSize(SIZE_Y * 0.25f);
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    public float getX() {
-        return x;
-    }
-
-    public void setX(float x) {
-        this.x = x;
-    }
-
-    public void setY(float y) {
-        this.y = y;
-    }
-
-    public boolean equals(Object other) {
-        return toString().equals(other.toString());
     }
 }

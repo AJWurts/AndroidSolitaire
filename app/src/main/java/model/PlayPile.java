@@ -4,20 +4,22 @@ import java.util.ArrayList;
 
 import static model.Card.SIZE_Y;
 
-/**
- * Created by Sigpit on 1/27/2018.
- */
 
 public class PlayPile extends Pile {
 
 
-    public PlayPile(int id) {
-        super(id);
+    PlayPile() {
+        super();
+    }
+
+    PlayPile(int testVar) {
+        super(testVar);
     }
 
     @Override
-    public boolean validNextCard(Card c) {
+    public boolean validNextCard(Movement m) {
         Card last = getLast();
+        Card c = m.getBase();
         boolean contains = below.contains(c);
         if (contains) {
             return true; // Allow placement of card that was previously there
@@ -31,6 +33,7 @@ public class PlayPile extends Pile {
        return false;  // Shouldn't happen but probably will
     }
 
+    @Override
     public void addCards(Movement m) {
         float[] base = getNextOpenCoords();
         for (Card c: m.getBelow()) {
@@ -39,10 +42,12 @@ public class PlayPile extends Pile {
             addCard(c);
         }
     }
+
+    @Override
     public ArrayList<Card> getAfter(Card c) {
         below.clear();
         boolean collecting = false;
-            for (int i = 0; i < cards.size(); i++) {
+        for (int i = 0; i < cards.size(); i++) {
             if (collecting || cards.get(i).equals(c)) {
                 collecting = true;
                 below.add(cards.get(i));
@@ -51,6 +56,7 @@ public class PlayPile extends Pile {
         return below;
     }
 
+    @Override
     public void flipLast() {
         Card last = getLast();
         if (last != null)

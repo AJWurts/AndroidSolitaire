@@ -4,57 +4,63 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.SurfaceView;
 import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+import android.view.View;
 
 import model.Card;
 import model.Deck;
 import model.Movement;
 import model.Pile;
 
-/**
- * Created by Sigpit on 1/21/2018.
- */
 
 public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
+    private static final int BACKGROUND_COLOR = 0xFF196636;
+    MainActivity main;
     private Deck deck = new Deck();
-
     private Movement moving;
-    private boolean isSolitareLoaded = true;
+    private boolean isSolitareLoaded = false;
     private boolean down = false;
     private float[] initXY = new float[2];
     private float[] originXY = new float[2];
-
-    private static final int BACKGROUND_COLOR = 0xFF196636;
-
+    private Statistics stats = new Statistics();
 
     public SolitareCanvas(Context context) {
         super(context);
+        stats = new Statistics();
     }
 
     public SolitareCanvas(Context context, AttributeSet attrs) {
         super(context, attrs);
+        isSolitareLoaded = false;
     }
 
     public SolitareCanvas(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    public void setup() {
-        getHolder().addCallback(this);
-        Card c;
-        for (int s = 0; s < 4; s++) {
-            for (int i = 0; i <= 12; i++) {
-                c = deck.getCard(s, i);
-                c.setXY(400, 400);
-                deck.addCard(c);
-            }
-        }
-        deck.shuffle();
+    @Override
+    public boolean performClick() {
+        return super.performClick();
+    }
+
+    @Override
+    public void surfaceCreated(SurfaceHolder surfaceHolder) {
+        initCanvas();
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+
     }
 
     public boolean onTouchEvent(MotionEvent event) {
+        performClick();
         Movement c;
 
         if (!isSolitareLoaded) {
@@ -78,6 +84,7 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
                     }
                 }  else if ( deck.onPile(7, new float[] {event.getX(), event.getY()})) {
                     deck.incDeckCards();
+                    stats.incMoves();
                 } else if (moving != null) {
                     float diffX = event.getX() - initXY[0];
                     float diffY = event.getY() - initXY[1];
@@ -102,30 +109,44 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
                 if (down && moving != null) {
                     int i = deck.getClosestValidPile(event.getX(),
                             event.getY(),
-                            moving.getBase());
+                            moving);
 
                     deck.addToPile(moving, i);
-                    if (i != moving.getOrigPileIndex())
+                    if (i != moving.getOrigPileIndex()) {
                         deck.flipLastCard(moving.getOrigPileIndex());
+                        stats.incMoves();
+                    }
+                    if (deck.hasFinished()) {
+                        isSolitareLoaded = false;
+                        stats.endTimer();
+                        main.openFinishedWindow(new View(getContext()));
+                    }
                 }
 
-
-
-
-                // For manual flipping
-//                if (moving != null && Math.abs(event.getX() - originXY[0]) + Math.abs(event.getY() - originXY[1]) < 5) {
-//                    moving.flip();
-//                    moving.setXY(shapeOriginXY);
-//                }
                 down = false;
                 moving = null;
                 initXY[0] = 0;
                 initXY[1] = 0;
+
                 break;
         }
 
         drawCards();
         return true;
+    }
+
+    public void setup(MainActivity main) {
+        this.main = main;
+        getHolder().addCallback(this);
+        Card c;
+        for (int s = 0; s < 4; s++) {
+            for (int i = 0; i <= 12; i++) {
+                c = deck.getCard(s, i);
+                c.setXY(400, 400);
+                deck.addCard(c);
+            }
+        }
+        deck.shuffle();
     }
 
     public void drawCards() {
@@ -163,7 +184,7 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
         Card.HALF_X = Card.SIZE_X / 2;
         Card.HALF_Y = Card.SIZE_Y / 2;
 
-        canvas.drawColor(0xFF196636);
+        canvas.drawColor(getResources().getColor(R.color.cardTable));
 
 //        deck.loadSolitare(width / 2, height / 2 - height * 0.30f);
 
@@ -173,6 +194,8 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
     }
 
     public void drawSolitare() {
+        stats.startTimer();
+        isSolitareLoaded = true;
         Canvas canvas = getHolder().lockCanvas();
         int width = canvas.getWidth();
         int height = canvas.getHeight();
@@ -183,31 +206,17 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
         Card.HALF_X = Card.SIZE_X / 2;
         Card.HALF_Y = Card.SIZE_Y / 2;
 
-        canvas.drawColor(0xFF196636);
+        canvas.drawColor(getResources().getColor(R.color.cardTable));
 
-        deck.loadSolitare(width / 2, height / 2 - height * 0.30f);
+        deck.loadSolitare(width / 2, height / 2 - height * 0.26f);
         drawPiles(canvas);
         drawCards(canvas);
 
         getHolder().unlockCanvasAndPost(canvas);
     }
 
-    @Override
-    public boolean performClick() {
-        return super.performClick();
+    public Statistics getStats() {
+        return stats;
     }
 
-    @Override
-    public void surfaceCreated(SurfaceHolder surfaceHolder) {
-        initCanvas();
-    }
-
-    @Override
-    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-    }
-
-    @Override
-    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-
-    }
 }

@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Solitare</string>
+    <string name="savedLowestMoves" translatable="false">com.sigpit.alexwurts.solitare.LOWEST_MOVES_KEY</string>
+    <string name="savedLowestTime" translatable="false">com.sigpit.alexwurts.solitare</string>
+    <string name="total_plays" translatable="false">com.sigpit.alexwurts.solitare.total_plays</string>
+    <string name="total_time" translatable="false">com.sigpit.alexwurts.solitare.TOTAL_TIME</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="time">Time:</string>
+    <string name="moves">Moves:</string>
+    <string name="games_played">Total Games Played:</string>
+    <string name="record_note">* next to score denotes new personal best</string>
+    <string name="close">Close</string>
+
 </resources>

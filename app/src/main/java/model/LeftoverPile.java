@@ -2,32 +2,20 @@ package model;
 
 import java.util.ArrayList;
 
-/**
- * Created by Sigpit on 1/25/2018.
- */
+
 
 public class LeftoverPile extends Pile {
 
     private int numLeft;
 
-    public LeftoverPile(int id) {
-        super(id);
+    public LeftoverPile() {
+        super();
         numLeft = size();
     }
 
-    public Card incPile() {
-        if (numLeft == 0) {
-            numLeft = size();
-            resetPile();
-//            incPile();
-        } else {
-            Card c = cards.get(numLeft - 1);
-            c.setFlipped(false);
-            c.setXY(c.getX() - Card.SIZE_X * 1.5f, c.getY());
-            numLeft--;
-            return c;
-        }
-        return null;
+    public LeftoverPile(int testVar) {
+        super(testVar);
+        numLeft = size();
     }
 
     public void resetPile() {
@@ -58,7 +46,25 @@ public class LeftoverPile extends Pile {
         return below;
     }
 
-    public boolean validNextCard(Card c) {
-        return below.contains(c);
+    public boolean validNextCard(Movement m) {
+
+        return below.contains(m.getBase());
     }
+
+    public Card incPile() {
+        if (numLeft == 0) {
+            numLeft = size();
+            resetPile();
+//            incPile();
+        } else {
+            Card c = cards.get(numLeft - 1);
+            c.setFlipped(false);
+            c.setXY(c.getX() - Card.SIZE_X * 1.5f, c.getY());
+            numLeft--;
+            return c;
+        }
+        return null;
+    }
+
+
 }

@@ -1,22 +1,15 @@
 package model;
 
-import android.graphics.Canvas;
-
 import java.util.ArrayList;
 import java.util.Collection;
 
-import model.Card;
-
-/**
- * Created by Sigpit on 1/24/2018.
- */
 
 public class Movement {
-    Card orig;
-    ArrayList<Card> below = new ArrayList<Card>();
-    int origPileIndex;
+    private Card orig;
+    private ArrayList<Card> below = new ArrayList<>();
+    private int origPileIndex;
 
-    public Movement(Card orig, ArrayList<Card> below, int origPileIndex) {
+    Movement(Card orig, ArrayList<Card> below, int origPileIndex) {
         this.orig = orig;
         this.below = below;
         this.origPileIndex = origPileIndex;
@@ -30,26 +23,27 @@ public class Movement {
         }
     }
 
-    public void setXY(float x, float y) {
-        for (Card c: below) {
-            y += Card.SIZE_Y * 0.3;
-            c.setXY(x, y);
-        }
-    }
-
     public Collection<Card> getBelow() {
         return below;
     }
 
-    public Card getBase() {
-        return orig;
-    }
-
+    // Getters and Setters
     public int getOrigPileIndex() {
         return origPileIndex;
     }
 
     public void setOrigPileIndex(int origPileIndex) {
         this.origPileIndex = origPileIndex;
+    }
+
+    public void setXY(float x, float y) {
+        for (Card c : below) {
+            y += Card.SIZE_Y * 0.3;
+            c.setXY(x, y);
+        }
+    }
+
+    public Card getBase() {
+        return orig;
     }
 }
