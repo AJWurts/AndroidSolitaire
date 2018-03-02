@@ -32,12 +32,20 @@ public class MainActivity extends AppCompatActivity {
         canvas.drawSolitare();
     }
 
+    /***
+     * Bound to button on Statistics Button on UI. Brings up Statistics Screen.
+     * @param v
+     */
     public void dispStatistics(View v) {
         Intent intent = new Intent(this, StatisticsView.class);
         startActivity(intent);
 
     }
 
+    /***
+     * Opens the end game statistics screen
+     * @param v view that called function
+     */
     public void openFinishedWindow(View v) {
         isPopupOpen = true;
         LayoutInflater layoutInflater = (LayoutInflater) MainActivity.this.getSystemService(
@@ -52,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
         popupWindow.showAtLocation(window, Gravity.CENTER, 0, 0);
 
+        // Sets TextView Values to correct values
         TextView timeValue = customView.findViewById(R.id.timeValue);
         TextView movesValue = customView.findViewById(R.id.movesValue);
         TextView totalMovesValue = customView.findViewById(R.id.totalPlaysValue);

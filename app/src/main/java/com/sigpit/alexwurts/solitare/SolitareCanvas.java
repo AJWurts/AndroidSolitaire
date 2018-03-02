@@ -26,6 +26,7 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
     private float[] originXY = new float[2];
     private Statistics stats = new Statistics();
 
+
     public SolitareCanvas(Context context) {
         super(context);
         stats = new Statistics();
@@ -59,6 +60,11 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
 
     }
 
+    /***
+     * Handle Touch Events
+     * @param event
+     * @return true if event not handled, false if handled.
+     */
     public boolean onTouchEvent(MotionEvent event) {
         performClick();
         Movement c;
@@ -135,6 +141,11 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
         return true;
     }
 
+    /**
+     * Set up main variables for SolitareCanvas
+     *
+     * @param main Connection to main activity
+     */
     public void setup(MainActivity main) {
         this.main = main;
         getHolder().addCallback(this);
@@ -142,16 +153,19 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
         for (int s = 0; s < 4; s++) {
             for (int i = 0; i <= 12; i++) {
                 c = deck.getCard(s, i);
-                c.setXY(400, 400);
+                c.setXY(400, 400); // move all cards to 400,400 to start out
                 deck.addCard(c);
             }
         }
         deck.shuffle();
     }
 
+    /***
+     * Draws cards directly the canvas
+     */
     public void drawCards() {
         Canvas canvas = getHolder().lockCanvas();
-        canvas.drawColor(0xFF196636);
+        canvas.drawColor(getResources().getColor(R.color.cardTable));
         drawPiles(canvas);
 
         for (Card c : deck.getDrawOrder()) {
@@ -160,6 +174,10 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
         getHolder().unlockCanvasAndPost(canvas);
     }
 
+    /***
+     * Takes a canvas and draws the cards on the canvas
+     * @param canvas canvas to draw on
+     */
     public void drawCards(Canvas canvas) {
 
         for (Card c : deck.getDrawOrder()) {
@@ -167,12 +185,20 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
         }
     }
 
+    /***
+     * Draws the translucent boxes for the card piles
+     * @param canvas canvas to draw on
+     */
     public void drawPiles(Canvas canvas) {
         for (Pile p: deck.getPiles()) {
             p.drawSelf(canvas);
         }
     }
 
+    /***
+     * Setup for canvas object by getting screen size, setting card size based
+     * on screen size, and drawing cards.
+     */
     public void initCanvas() {
         Canvas canvas = getHolder().lockCanvas();
         int width = canvas.getWidth();
@@ -193,6 +219,11 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
         getHolder().unlockCanvasAndPost(canvas);
     }
 
+    /***
+     * Draws solitaire on the canvas
+     * Starts the statistics timer
+     * Enables touch interactions
+     */
     public void drawSolitare() {
         stats.startTimer();
         isSolitareLoaded = true;
@@ -215,6 +246,11 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
         getHolder().unlockCanvasAndPost(canvas);
     }
 
+    /***
+     * Returns Statistics Object
+     * @return Statistics Object with currentTime and currentMoves set from most recent
+     * finished game
+     */
     public Statistics getStats() {
         return stats;
     }
