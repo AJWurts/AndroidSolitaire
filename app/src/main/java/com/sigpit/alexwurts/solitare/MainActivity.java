@@ -47,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
      * @param v view that called function
      */
     public void openFinishedWindow(View v) {
+
+        if (isPopupOpen) {
+            return;
+        }
         isPopupOpen = true;
         LayoutInflater layoutInflater = (LayoutInflater) MainActivity.this.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
@@ -56,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         popupWindow = new PopupWindow(customView,
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
         popupWindow.showAtLocation(window, Gravity.CENTER, 0, 0);
 
