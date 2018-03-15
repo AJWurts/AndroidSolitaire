@@ -7,20 +7,23 @@ import android.graphics.RectF;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static model.Card.SIZE_Y;
+import static model.Card.size_y;
 
 
 abstract public class Pile {
     protected ArrayList<Card> cards = new ArrayList<Card>();
     protected ArrayList<Card> below = new ArrayList<>();
+    protected Paint p;
+    protected RectF area;
+    Paint resetLogo;
     private float x = -1;
     private float y = -1;
-    private Paint p;
-    private RectF area;
 
     public Pile() {
         p = new Paint();
         p.setColor(0x7719eab3);
+        resetLogo = new Paint();
+        resetLogo.setColor(0xFF04b745);
     }
 
     public Pile(int testVar) {
@@ -44,7 +47,7 @@ abstract public class Pile {
             }
             c.setX(x);
             c.setY(y);
-            y += SIZE_Y * 0.3;
+            y += size_y * 0.3;
         }
     }
 
@@ -59,8 +62,8 @@ abstract public class Pile {
     public void setXY(float x, float y) {
         this.x = x;
         this.y = y;
-        area = new RectF(x - Card.HALF_X, y - Card.HALF_Y,
-                        x + Card.HALF_X, y + Card.HALF_Y);
+        area = new RectF(x - Card.half_x, y - Card.half_y,
+                x + Card.half_x, y + Card.half_y);
     }
 
     public Card getLast() {
@@ -106,7 +109,9 @@ abstract public class Pile {
     }
 
     public void drawSelf(Canvas canvas) {
+
         canvas.drawRect(area, p);
+//        canvas.drawCircle(area.centerX(), area.centerY(), 20, resetLogo);
     }
 
     public float[] getXY() {
@@ -118,7 +123,7 @@ abstract public class Pile {
             return new float[] {x, y};
         } else {
             float[] temp = getLastCoords();
-            temp[1] += Card.SIZE_Y * 0.3;
+            temp[1] += Card.size_y * PlayPile.OFFSET;
             return temp;
         }
     }

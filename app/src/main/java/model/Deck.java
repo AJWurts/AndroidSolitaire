@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 
-import static model.Card.SIZE_X;
-import static model.Card.SIZE_Y;
+import static model.Card.size_x;
+import static model.Card.size_y;
 
 
 
@@ -137,8 +137,8 @@ public class Deck {
     public void loadSolitare(float cX, float cY) {
         shuffle();
         clearPiles();
-        float GAP = 1.4f;
-        float x = cX - (SIZE_X * (GAP * 3f));
+        float GAP = 1.1f;
+        float x = cX - (size_x * (GAP * 3f));
         float y = cY;
         Card c;
 
@@ -160,26 +160,26 @@ public class Deck {
                 else
                     c.setFlipped(true);
 
-                y += Card.SIZE_Y * 0.3;
+                y += Card.size_y * PlayPile.OFFSET;
             }
 
-            x += SIZE_X * GAP;
+            x += size_x * GAP;
         }
 
         for (; i < drawOrder.size(); i++) {
             c = drawOrder.get(i);
             piles.get(7).addCard(c);
-            piles.get(7).setXY(cX - (SIZE_X * (GAP * 3f)) + (SIZE_X * (GAP * 6f)),
-                    cY - Card.SIZE_Y * 1.5f);
-            c.setXY(cX - (SIZE_X * (GAP * 3f)) + (SIZE_X * (GAP * 6f)),
-                    cY - Card.SIZE_Y * 1.5f);
+            piles.get(7).setXY(cX - (size_x * (GAP * 3f)) + (size_x * (GAP * 6f)),
+                    cY - Card.size_y * 1.5f);
+            c.setXY(cX - (size_x * (GAP * 3f)) + (size_x * (GAP * 6f)),
+                    cY - Card.size_y * 1.5f);
             c.setFlipped(true);
             c.updateTextSize();
         }
 
         for (int j = 8; j <= 11; j++) {
-            piles.get(j).setXY(cX - (SIZE_X * (GAP * 3f)) + (SIZE_X * GAP * (j - 8f)),
-                    cY - SIZE_Y * 1.5f);
+            piles.get(j).setXY(cX - (size_x * (GAP * 3f)) + (size_x * GAP * (j - 8f)),
+                    cY - size_y * 1.5f);
         }
         ((LeftoverPile)piles.get(7)).incPile();
 

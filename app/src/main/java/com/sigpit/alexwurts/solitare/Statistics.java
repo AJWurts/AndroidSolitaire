@@ -59,6 +59,7 @@ public class Statistics implements Serializable {
     }
 
     public String getReadableTime() {
+        long currentTime = System.currentTimeMillis() - startTime;
         currentTime /= 1000;
         int hours = (int) currentTime / 3600;
         int minutes = ((int) currentTime - (hours * 3600)) / 60;

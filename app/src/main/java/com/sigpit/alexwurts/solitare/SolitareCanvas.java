@@ -49,6 +49,7 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         initCanvas();
+        drawSolitare();
     }
 
     @Override
@@ -183,6 +184,7 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
         for (Card c : deck.getDrawOrder()) {
             c.drawCard(canvas);
         }
+
     }
 
     /***
@@ -195,20 +197,19 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
         }
     }
 
+    public void drawPiles() {
+        Canvas canvas = getHolder().lockCanvas();
+        drawPiles(canvas);
+        getHolder().unlockCanvasAndPost(canvas);
+    }
+
     /***
      * Setup for canvas object by getting screen size, setting card size based
      * on screen size, and drawing cards.
      */
     public void initCanvas() {
         Canvas canvas = getHolder().lockCanvas();
-        int width = canvas.getWidth();
-        int height = canvas.getHeight();
 
-        Card.SIZE_X = width * 0.10f;
-        Card.SIZE_Y = Card.SIZE_X * 1.4f;
-
-        Card.HALF_X = Card.SIZE_X / 2;
-        Card.HALF_Y = Card.SIZE_Y / 2;
 
         canvas.drawColor(getResources().getColor(R.color.cardTable));
 
@@ -230,16 +231,13 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
         Canvas canvas = getHolder().lockCanvas();
         int width = canvas.getWidth();
         int height = canvas.getHeight();
+        width = Math.min(width, height);
 
-        Card.SIZE_X = width * 0.10f;
-        Card.SIZE_Y = Card.SIZE_X * 1.4f;
-
-        Card.HALF_X = Card.SIZE_X / 2;
-        Card.HALF_Y = Card.SIZE_Y / 2;
+        Card.setCardSize(width * .13f, width * 0.182f);
 
         canvas.drawColor(getResources().getColor(R.color.cardTable));
 
-        deck.loadSolitare(width / 2, height / 2 - height * 0.26f);
+        deck.loadSolitare(width / 2, height / 2 - height * 0.20f);
         drawPiles(canvas);
         drawCards(canvas);
 

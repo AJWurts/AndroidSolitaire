@@ -9,10 +9,10 @@ import android.graphics.Typeface;
 
 
 public class Card {
-    public static float SIZE_X = 250 / 2;
-    public static float HALF_X = SIZE_X / 2;
-    public static float SIZE_Y = 350 / 2;
-    public static float HALF_Y = SIZE_Y / 2;
+    public static float size_x = 250 / 2;
+    public static float half_x = size_x / 2;
+    public static float size_y = 350 / 2;
+    public static float half_y = size_y / 2;
 
     public final char suit;
     public final int num;
@@ -34,7 +34,7 @@ public class Card {
         suitColor = new Paint();
         suitColor.setColor(getColor());
         suitColor.setTypeface(consolas);
-        suitColor.setTextSize(SIZE_Y * 0.25f);
+        suitColor.setTextSize(size_y * 0.25f);
         suitColor.setStyle(Paint.Style.FILL);
 
         backgroundColor = new Paint();
@@ -50,7 +50,7 @@ public class Card {
         backColor.setColor(0xFF000088);
         backColor.setStyle(Paint.Style.FILL);
 
-        area = new RectF(0, 0, SIZE_X, SIZE_Y);
+        area = new RectF(0, 0, size_x, size_y);
     }
 
     public Card(char suit, int num, boolean isFlipped) {
@@ -68,6 +68,13 @@ public class Card {
         this.isFlipped = isFlipped;
     }
 
+    public static void setCardSize(float x, float y) {
+        size_x = x;
+        half_x = size_x / 2;
+        size_y = y;
+        half_y = size_y / 2;
+    }
+
     public boolean equals(Object other) {
         return toString().equals(other.toString());
     }
@@ -78,23 +85,23 @@ public class Card {
 
     public void drawCard(Canvas canvas, float centerX, float centerY) {
         int r = 10; // corners radius
-        area = new RectF(centerX - HALF_X, centerY - HALF_Y,
-                centerX + HALF_X, centerY + HALF_Y);
+        area = new RectF(centerX - half_x, centerY - half_y,
+                centerX + half_x, centerY + half_y);
         canvas.drawRoundRect(area, r, r, backgroundColor);
         canvas.drawRoundRect(area, r, r, borderColor);
         if (!isFlipped) {
             if (num == 10) {
-                canvas.drawText(getChar(), centerX - SIZE_X * 0.47f, centerY - SIZE_Y * 0.28f, suitColor);
-                canvas.drawText(getChar(), centerX + SIZE_X * 0.08f, centerY + SIZE_Y * 0.45f, suitColor);
+                canvas.drawText(getChar(), centerX - size_x * 0.47f, centerY - size_y * 0.28f, suitColor);
+                canvas.drawText(getChar(), centerX + size_x * 0.08f, centerY + size_y * 0.45f, suitColor);
             } else {
-                canvas.drawText(getChar(), centerX - SIZE_X * 0.44f, centerY - SIZE_Y * 0.28f, suitColor);
-                canvas.drawText(getChar(), centerX + SIZE_X * 0.20f, centerY + SIZE_Y * 0.45f, suitColor);
+                canvas.drawText(getChar(), centerX - size_x * 0.44f, centerY - size_y * 0.28f, suitColor);
+                canvas.drawText(getChar(), centerX + size_x * 0.20f, centerY + size_y * 0.45f, suitColor);
             }
-            drawIcon(canvas, centerX + SIZE_X * 0.33f, centerY - SIZE_Y * 0.38f);
-            drawIcon(canvas, centerX - SIZE_X * 0.33f, centerY + SIZE_Y * 0.35f);
+            drawIcon(canvas, centerX + size_x * 0.33f, centerY - size_y * 0.38f);
+            drawIcon(canvas, centerX - size_x * 0.33f, centerY + size_y * 0.35f);
         } else {
-            canvas.drawRect(centerX - (SIZE_X * 0.45f), centerY - (SIZE_Y * 0.45f),
-                    centerX + (SIZE_X * 0.45f), centerY + (SIZE_Y * 0.45f), backColor);
+            canvas.drawRect(centerX - (size_x * 0.45f), centerY - (size_y * 0.45f),
+                    centerX + (size_x * 0.45f), centerY + (size_y * 0.45f), backColor);
 
         }
     }
@@ -151,7 +158,7 @@ public class Card {
     }
 
     public void updateTextSize() {
-        suitColor.setTextSize(SIZE_Y * 0.25f);
+        suitColor.setTextSize(size_y * 0.25f);
     }
 
     public float getY() {
@@ -174,63 +181,63 @@ public class Card {
         Path wallpath = new Path();
         switch (suit) {
             case 'h':
-                wallpath.moveTo(centerX + (SIZE_X * 0.1f), centerY);
-                wallpath.lineTo(centerX, centerY + SIZE_Y * 0.1f);
-                wallpath.lineTo(centerX - (SIZE_X * 0.1f), centerY);
-                wallpath.lineTo(centerX, centerY - SIZE_Y * 0.05f);
-                wallpath.lineTo(centerX + (SIZE_X * 0.1f), centerY);
+                wallpath.moveTo(centerX + (size_x * 0.1f), centerY);
+                wallpath.lineTo(centerX, centerY + size_y * 0.1f);
+                wallpath.lineTo(centerX - (size_x * 0.1f), centerY);
+                wallpath.lineTo(centerX, centerY - size_y * 0.05f);
+                wallpath.lineTo(centerX + (size_x * 0.1f), centerY);
                 canvas.drawPath(wallpath, suitColor);
 
                 float r;
-                r = (float)Math.hypot(SIZE_X * 0.1,  SIZE_Y * 0.05) / 2;
-                canvas.drawCircle(centerX - (SIZE_X * 0.05f), centerY - (SIZE_Y * 0.025f),
+                r = (float) Math.hypot(size_x * 0.1, size_y * 0.05) / 2;
+                canvas.drawCircle(centerX - (size_x * 0.05f), centerY - (size_y * 0.025f),
                         r, suitColor);
-                canvas.drawCircle(centerX + (SIZE_X * 0.05f), centerY - (SIZE_Y * 0.025f),
+                canvas.drawCircle(centerX + (size_x * 0.05f), centerY - (size_y * 0.025f),
                         r, suitColor);
                 break;
             case 's':
                 wallpath = new Path();
 
-                wallpath.moveTo(centerX, centerY + SIZE_Y * 0.05f);
-                wallpath.lineTo(centerX + (SIZE_X * 0.1f), centerY);
-                wallpath.lineTo(centerX, centerY - SIZE_Y * 0.1f);
-                wallpath.lineTo(centerX - (SIZE_X * 0.1f), centerY);
-                wallpath.lineTo(centerX, centerY + SIZE_Y * 0.05f);
-                wallpath.lineTo(centerX - (SIZE_X * 0.07f), centerY + (SIZE_Y * 0.1f));
-                wallpath.lineTo(centerX + (SIZE_X * 0.07f), centerY + (SIZE_Y * 0.1f));
-                wallpath.lineTo(centerX, centerY + SIZE_Y * 0.05f);
+                wallpath.moveTo(centerX, centerY + size_y * 0.05f);
+                wallpath.lineTo(centerX + (size_x * 0.1f), centerY);
+                wallpath.lineTo(centerX, centerY - size_y * 0.1f);
+                wallpath.lineTo(centerX - (size_x * 0.1f), centerY);
+                wallpath.lineTo(centerX, centerY + size_y * 0.05f);
+                wallpath.lineTo(centerX - (size_x * 0.07f), centerY + (size_y * 0.1f));
+                wallpath.lineTo(centerX + (size_x * 0.07f), centerY + (size_y * 0.1f));
+                wallpath.lineTo(centerX, centerY + size_y * 0.05f);
                 canvas.drawPath(wallpath, suitColor);
 
                 float r1;
-                r1 = (float)Math.hypot(SIZE_X * 0.1,  SIZE_Y * 0.05) / 2;
-                canvas.drawCircle(centerX - (SIZE_X * 0.05f), centerY + (SIZE_Y * 0.025f),
+                r1 = (float) Math.hypot(size_x * 0.1, size_y * 0.05) / 2;
+                canvas.drawCircle(centerX - (size_x * 0.05f), centerY + (size_y * 0.025f),
                         r1, suitColor);
-                canvas.drawCircle(centerX + (SIZE_X * 0.05f), centerY + (SIZE_Y * 0.025f),
+                canvas.drawCircle(centerX + (size_x * 0.05f), centerY + (size_y * 0.025f),
                         r1, suitColor);
                 break;
             case 'd':
                 wallpath = new Path();
-                wallpath.moveTo(centerX, centerY + SIZE_Y * 0.1f);
-                wallpath.lineTo(centerX + (SIZE_X * 0.1f), centerY);
-                wallpath.lineTo(centerX, centerY - SIZE_Y * 0.1f);
-                wallpath.lineTo(centerX - (SIZE_X * 0.1f), centerY);
-                wallpath.lineTo(centerX, centerY + SIZE_Y * 0.1f);
+                wallpath.moveTo(centerX, centerY + size_y * 0.1f);
+                wallpath.lineTo(centerX + (size_x * 0.1f), centerY);
+                wallpath.lineTo(centerX, centerY - size_y * 0.1f);
+                wallpath.lineTo(centerX - (size_x * 0.1f), centerY);
+                wallpath.lineTo(centerX, centerY + size_y * 0.1f);
 
                 canvas.drawPath(wallpath, suitColor);
                 break;
             case 'c':
                 wallpath = new Path();
                 wallpath.moveTo(centerX, centerY);
-                wallpath.lineTo(centerX - (SIZE_X * 0.07f), centerY + (SIZE_Y * 0.08f));
-                wallpath.lineTo(centerX + (SIZE_X * 0.07f), centerY + (SIZE_Y * 0.08f));
+                wallpath.lineTo(centerX - (size_x * 0.07f), centerY + (size_y * 0.08f));
+                wallpath.lineTo(centerX + (size_x * 0.07f), centerY + (size_y * 0.08f));
                 wallpath.lineTo(centerX, centerY);
                 canvas.drawPath(wallpath, suitColor);
 
                 float r3;
-                r3 = SIZE_X * 0.055f;
-                canvas.drawCircle(centerX + (SIZE_X * 0.07f), centerY , r3, suitColor );
-                canvas.drawCircle(centerX - (SIZE_X * 0.07f), centerY, r3, suitColor);
-                canvas.drawCircle(centerX, centerY - SIZE_Y * 0.06f, r3, suitColor);
+                r3 = size_x * 0.055f;
+                canvas.drawCircle(centerX + (size_x * 0.07f), centerY, r3, suitColor);
+                canvas.drawCircle(centerX - (size_x * 0.07f), centerY, r3, suitColor);
+                canvas.drawCircle(centerX, centerY - size_y * 0.06f, r3, suitColor);
                 canvas.drawCircle(centerX, centerY, r3, suitColor);
 
         }

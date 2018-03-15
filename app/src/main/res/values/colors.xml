@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="cardTable">#196636</color>
     <color name="translucentGray">#e0191919</color>
+    <color name="resetLogo">#04b745</color>
 </resources>

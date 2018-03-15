@@ -38,7 +38,7 @@ public class Movement {
 
     public void setXY(float x, float y) {
         for (Card c : below) {
-            y += Card.SIZE_Y * 0.3;
+            y += Card.size_y * 0.3;
             c.setXY(x, y);
         }
     }

@@ -2,11 +2,12 @@ package model;
 
 import java.util.ArrayList;
 
-import static model.Card.SIZE_Y;
+import static model.Card.size_y;
 
 
 public class PlayPile extends Pile {
 
+    public static float OFFSET = 0.25f;
 
     PlayPile() {
         super();
@@ -38,7 +39,7 @@ public class PlayPile extends Pile {
         float[] base = getNextOpenCoords();
         for (Card c: m.getBelow()) {
             c.setXY(base[0], base[1]);
-            base[1] += SIZE_Y * 0.3f;
+            base[1] += size_y * OFFSET;
             addCard(c);
         }
     }
