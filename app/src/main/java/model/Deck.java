@@ -230,7 +230,7 @@ public class Deck {
     public boolean hasFinished() {
         boolean isFinished = true;
 
-        for (int i = 8; i < 11; i++) {
+        for (int i = 8; i <= 11; i++) {
             isFinished &= ((AcePile) piles.get(i)).isComplete();
         }
 

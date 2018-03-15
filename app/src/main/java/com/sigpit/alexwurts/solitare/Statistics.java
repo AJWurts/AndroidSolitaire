@@ -38,6 +38,7 @@ public class Statistics implements Serializable {
     public void startTimer() {
         gotPBMoves = false;
         gotPBTime = false;
+        currentMoves = 0;
         startTime = System.currentTimeMillis();
     }
 

@@ -20,7 +20,7 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
     MainActivity main;
     private Deck deck = new Deck();
     private Movement moving;
-    private boolean isSolitareLoaded = false;
+    private boolean isSolitaireLoaded = false;
     private boolean down = false;
     private float[] initXY = new float[2];
     private float[] originXY = new float[2];
@@ -34,7 +34,7 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
 
     public SolitareCanvas(Context context, AttributeSet attrs) {
         super(context, attrs);
-        isSolitareLoaded = false;
+        isSolitaireLoaded = false;
     }
 
     public SolitareCanvas(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -49,7 +49,9 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         initCanvas();
-        drawSolitare();
+        if (!isSolitaireLoaded) {
+            drawSolitare();
+        }
     }
 
     @Override
@@ -70,7 +72,7 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
         performClick();
         Movement c;
 
-        if (!isSolitareLoaded) {
+        if (!isSolitaireLoaded) {
             return false;
         }
 
@@ -124,7 +126,7 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
                         stats.incMoves();
                     }
                     if (deck.hasFinished()) {
-                        isSolitareLoaded = false;
+                        isSolitaireLoaded = false;
                         stats.endTimer();
                         main.openFinishedWindow(new View(getContext()));
                     }
@@ -214,7 +216,7 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
         canvas.drawColor(getResources().getColor(R.color.cardTable));
 
 //        deck.loadSolitare(width / 2, height / 2 - height * 0.30f);
-
+        if (isSolitaireLoaded) drawPiles(canvas);
         drawCards(canvas);
 
         getHolder().unlockCanvasAndPost(canvas);
@@ -227,7 +229,7 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
      */
     public void drawSolitare() {
         stats.startTimer();
-        isSolitareLoaded = true;
+        isSolitaireLoaded = true;
         Canvas canvas = getHolder().lockCanvas();
         int width = canvas.getWidth();
         int height = canvas.getHeight();
@@ -237,7 +239,7 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
 
         canvas.drawColor(getResources().getColor(R.color.cardTable));
 
-        deck.loadSolitare(width / 2, height / 2 - height * 0.20f);
+        deck.loadSolitare(width / 2, Card.size_y * 2.05f);
         drawPiles(canvas);
         drawCards(canvas);
 

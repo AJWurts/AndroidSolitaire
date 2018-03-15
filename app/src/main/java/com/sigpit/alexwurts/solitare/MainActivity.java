@@ -18,6 +18,8 @@ public class MainActivity extends AppCompatActivity {
     SolitareCanvas canvas;
     PopupWindow popupWindow;
     Button closePopUp;
+    Button yes;
+    Button no;
     boolean isPopupOpen = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,13 +30,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void dispSolitare(View v) {
+    public void dispSolitaire() {
         canvas.drawSolitare();
     }
 
     /***
      * Bound to button on Statistics Button on UI. Brings up Statistics Screen.
-     * @param v
      */
     public void dispStatistics(View v) {
         Intent intent = new Intent(this, StatisticsView.class);
@@ -67,16 +68,51 @@ public class MainActivity extends AppCompatActivity {
         // Sets TextView Values to correct values
         TextView timeValue = customView.findViewById(R.id.timeValue);
         TextView movesValue = customView.findViewById(R.id.movesValue);
-        TextView totalMovesValue = customView.findViewById(R.id.totalPlaysValue);
+//        TextView totalMovesValue = customView.findViewById(R.id.totalPlaysValue);
 
         Statistics stats = canvas.getStats();
 
         timeValue.setText(stats.getReadableTime());
         movesValue.setText(stats.getCurrentMovesAsString());
-        totalMovesValue.setText(stats.getTotalPlaysAsString());
+//        totalMovesValue.setText(stats.getTotalPlaysAsString());
 
 
         closePopUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+                isPopupOpen = false;
+            }
+        });
+    }
+
+    public void handleRestart(View v) {
+        if (isPopupOpen) {
+            return;
+        }
+        LayoutInflater layoutInflater = (LayoutInflater) MainActivity.this.getSystemService(
+                Context.LAYOUT_INFLATER_SERVICE);
+        View customView = layoutInflater.inflate(R.layout.restartpopup, null);
+        yes = customView.findViewById(R.id.yesButton);
+        no = customView.findViewById(R.id.noButton);
+        ConstraintLayout window = findViewById(R.id.popupLayout);
+
+
+        popupWindow = new PopupWindow(customView,
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+
+        popupWindow.showAtLocation(window, Gravity.CENTER, 0, 0);
+
+        yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+                dispSolitaire();
+                isPopupOpen = false;
+            }
+        });
+
+        no.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 popupWindow.dismiss();
