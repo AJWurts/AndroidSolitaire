@@ -1,16 +1,17 @@
 Solitaire
 by Alexander Wurts
 
-An application that allows a user to play solitare.
+An application to play Solitaire.
 Work in progress
-
-Features to add:
--Timing for Solitare - Half implemented
--Scoring for Solitare 
+Features:
+-Timing for Solitare 
 -Placement snapping - Added
 -automatic flipping - Added
 -automatic deck card handling 
 -Save state between app restarts - Only for soft restarts, not full restarts
+
+Features to add:
+-Scoring for Solitare
 -when moving a pile take all cards below too - ADded
 -possibly more game types
   -3 card draw
