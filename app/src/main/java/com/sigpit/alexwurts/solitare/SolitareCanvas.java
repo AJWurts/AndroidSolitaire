@@ -16,7 +16,7 @@ import model.Pile;
 
 public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
-    private static final int BACKGROUND_COLOR = 0xFF196636;
+
     MainActivity main;
     private Deck deck = new Deck();
     private Movement moving;
