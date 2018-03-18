@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import model.Deck;
+
 public class MainActivity extends AppCompatActivity {
 
     SolitareCanvas canvas;
@@ -21,12 +23,14 @@ public class MainActivity extends AppCompatActivity {
     Button yes;
     Button no;
     boolean isPopupOpen = false;
+    private Deck deckSaver = new Deck();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         canvas = findViewById(R.id.surfaceView);
-        canvas.setup(this);
+        canvas.setup(this, deckSaver);
     }
 
 
@@ -38,9 +42,9 @@ public class MainActivity extends AppCompatActivity {
      * Bound to button on Statistics Button on UI. Brings up Statistics Screen.
      */
     public void dispStatistics(View v) {
+        deckSaver = canvas.getDeck();
         Intent intent = new Intent(this, StatisticsView.class);
         startActivity(intent);
-
     }
 
     /***

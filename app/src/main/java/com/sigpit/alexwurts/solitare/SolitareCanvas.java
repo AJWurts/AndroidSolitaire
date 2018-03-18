@@ -18,7 +18,7 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
 
 
     MainActivity main;
-    private Deck deck = new Deck();
+    private Deck deck;
     private Movement moving;
     private boolean isSolitaireLoaded = false;
     private boolean down = false;
@@ -149,8 +149,9 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
      *
      * @param main Connection to main activity
      */
-    public void setup(MainActivity main) {
+    public void setup(MainActivity main, Deck deck) {
         this.main = main;
+        this.deck = deck;
         getHolder().addCallback(this);
         Card c;
         for (int s = 0; s < 4; s++) {
@@ -255,4 +256,11 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
         return stats;
     }
 
+    public Deck getDeck() {
+        return deck;
+    }
+
+    public void setDeck(Deck deck) {
+        this.deck = deck;
+    }
 }
