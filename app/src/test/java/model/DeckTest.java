@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 
@@ -19,10 +18,6 @@ public class DeckTest {
     public void setUp() {
         ArrayList<Pile> piles = d.getPiles();
         Pile p;
-        for (int i = 0; i < 12; i++) {
-            p = piles.get(i);
-            p.setXY(200 * i, 0);
-        }
 
         // Pile 0 is empty
         piles.get(1).addCard(d.getCard(0, 0)); // 2 of Hearts
@@ -40,7 +35,7 @@ public class DeckTest {
 
 
     @Test
-    public void getCard() throws Exception {
+    public void getCard() {
         Card s1 = new Card('s', 1, 0);
         Card s1FromDeck = d.getCard(Deck.SPADES, 0);
         assertTrue(s1.equals(s1FromDeck));
@@ -59,66 +54,57 @@ public class DeckTest {
     }
 
     @Test
-    public void getClosestValidPile() throws Exception {
-        Card base = new Card('h', 10, 0); // 10 of Hearts
-        Movement m = new Movement(base, empty, 0);
-        int i1 = d.getClosestValidPile(0, 0, m); // Can go on Pile 0 or 5 but closest to 0
-        assertEquals(0, i1);
+    public void getMovement() {
 
-        int i2 = d.getClosestValidPile(5 * 200, 0, m);
-        assertEquals(5, i2);
+
     }
 
     @Test
-    public void getMovement() throws Exception {
+    public void getCard1() {
     }
 
     @Test
-    public void getCard1() throws Exception {
+    public void flipLastCard() {
     }
 
     @Test
-    public void flipLastCard() throws Exception {
+    public void addToPile() {
     }
 
     @Test
-    public void addToPile() throws Exception {
+    public void updateCard() {
     }
 
     @Test
-    public void updateCard() throws Exception {
+    public void updateCards() {
     }
 
     @Test
-    public void updateCards() throws Exception {
+    public void getDrawOrder() {
     }
 
     @Test
-    public void getDrawOrder() throws Exception {
+    public void loadSolitare() {
     }
 
     @Test
-    public void loadSolitare() throws Exception {
+    public void addCard() {
     }
 
     @Test
-    public void addCard() throws Exception {
+    public void incDeckCards() {
     }
 
     @Test
-    public void incDeckCards() throws Exception {
+    public void getPiles() {
     }
 
     @Test
-    public void getPiles() throws Exception {
+    public void onPile() {
     }
 
     @Test
-    public void onPile() throws Exception {
-    }
-
-    @Test
-    public void hasFinished() throws Exception {
+    public void hasFinished() {
     }
 
 }

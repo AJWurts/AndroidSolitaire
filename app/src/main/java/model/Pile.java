@@ -66,6 +66,7 @@ abstract public class Pile {
                 x + Card.half_x, y + Card.half_y);
     }
 
+
     public Card getLast() {
         if (size() == 0) {
             return null;

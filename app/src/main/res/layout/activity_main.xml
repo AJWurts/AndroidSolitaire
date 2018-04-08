@@ -45,6 +45,15 @@
                 android:onClick="handleRestart"
                 android:text="Restart" />
 
+            <Button
+                android:id="@+id/statsButton"
+                style="@style/Widget.AppCompat.Button.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="dispStatistics"
+                android:text="Statistics" />
+
         </LinearLayout>
 
     </FrameLayout>

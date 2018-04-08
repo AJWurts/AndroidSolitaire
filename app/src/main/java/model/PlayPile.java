@@ -13,10 +13,21 @@ public class PlayPile extends Pile {
         super();
     }
 
+    /**
+     * Used for testing
+     *
+     * @param testVar unused
+     */
     PlayPile(int testVar) {
         super(testVar);
     }
 
+
+    /**
+     * checks if base card from movement m can be placed on pile
+     * @param m movement to be checked
+     * @return true if can be placed, false if cannot
+     */
     @Override
     public boolean validNextCard(Movement m) {
         Card last = getLast();
@@ -31,9 +42,13 @@ public class PlayPile extends Pile {
                     || ((c.suit == 'h' || c.suit == 'd') && (last.suit == 'c' || last.suit == 's')))
                     && (last.num - 1 == c.num) ;
         }
-       return false;  // Shouldn't happen but probably will
+        return false;
     }
 
+    /**
+     * Adds cards from movement to pile giving them the correct offset on screen
+     * @param m movement to be added to pile
+     */
     @Override
     public void addCards(Movement m) {
         float[] base = getNextOpenCoords();
@@ -44,6 +59,11 @@ public class PlayPile extends Pile {
         }
     }
 
+    /**
+     * Retrieves a list of card after the given card c
+     * @param c card it looks for
+     * @return ArrayList of cards after card c
+     */
     @Override
     public ArrayList<Card> getAfter(Card c) {
         below.clear();
@@ -57,6 +77,9 @@ public class PlayPile extends Pile {
         return below;
     }
 
+    /**
+     * Flips the last card in the pile
+     */
     @Override
     public void flipLast() {
         Card last = getLast();

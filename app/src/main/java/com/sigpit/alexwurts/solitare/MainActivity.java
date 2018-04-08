@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     Button no;
     boolean isPopupOpen = false;
     private Deck deckSaver = new Deck();
+    boolean setup = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +32,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         canvas = findViewById(R.id.surfaceView);
         canvas.setup(this, deckSaver);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (setup) {
+            canvas.setDeck(deckSaver);
+        }
+        setup = true;
     }
 
 
+    /**
+     * Displays Solitaire on the canvas
+     */
     public void dispSolitaire() {
         canvas.drawSolitare();
     }
@@ -52,11 +66,12 @@ public class MainActivity extends AppCompatActivity {
      * @param v view that called function
      */
     public void openFinishedWindow(View v) {
-
+        // Checks to see if popup already open
         if (isPopupOpen) {
             return;
         }
         isPopupOpen = true;
+        // Loads popup
         LayoutInflater layoutInflater = (LayoutInflater) MainActivity.this.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         View customView = layoutInflater.inflate(R.layout.winpopout, null);
@@ -80,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         movesValue.setText(stats.getCurrentMovesAsString());
 //        totalMovesValue.setText(stats.getTotalPlaysAsString());
 
-
+        // setup for listener to dismiss popup
         closePopUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,6 +105,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Popup window for restart so it the user cant restart automatically
+     *
+     * @param v
+     */
     public void handleRestart(View v) {
         if (isPopupOpen) {
             return;

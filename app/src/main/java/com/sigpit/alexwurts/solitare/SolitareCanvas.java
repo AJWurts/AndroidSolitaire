@@ -157,7 +157,7 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
         for (int s = 0; s < 4; s++) {
             for (int i = 0; i <= 12; i++) {
                 c = deck.getCard(s, i);
-                c.setXY(400, 400); // move all cards to 400,400 to start out
+                c.setXY(-500, -500); // move all cards to 400,400 to start out
                 deck.addCard(c);
             }
         }
@@ -261,6 +261,7 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
     }
 
     public void setDeck(Deck deck) {
+        isSolitaireLoaded = true;
         this.deck = deck;
     }
 }
