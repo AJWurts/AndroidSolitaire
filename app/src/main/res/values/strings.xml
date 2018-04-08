@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">Solitaire</string>
-    <string name="savedLowestMoves" translatable="false">com.sigpit.alexwurts.solitare.LOWEST_MOVES_KEY</string>
-    <string name="savedLowestTime" translatable="false">com.sigpit.alexwurts.solitare</string>
-    <string name="total_plays" translatable="false">com.sigpit.alexwurts.solitare.total_plays</string>
+    <string name="lowest_moves" translatable="false">com.sigpit.alexwurts.solitare.LOWEST_MOVES</string>
+    <string name="lowest_time" translatable="false">com.sigpit.alexwurts.solitare.LOWEST_TIME</string>
+    <string name="total_plays" translatable="false">com.sigpit.alexwurts.solitare.TOTAL_PLAYS</string>
     <string name="total_time" translatable="false">com.sigpit.alexwurts.solitare.TOTAL_TIME</string>
+    <string name='preference_file_key' translatable="false">com.sigpit.alexwurts.solitaire.PREFERENCE_KEY_FILE</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="time">Time:</string>
     <string name="moves">Moves:</string>
     <string name="games_played">Total Games Played:</string>
@@ -13,5 +13,10 @@
     <string name="close">Close</string>
     <string name="yes">yes</string>
     <string name="no">no</string>
+    <string name="lowest_moves_string">Best Moves: </string>
+    <string name="best_time">Best Time:</string>
+    <string name="total_plays_string">Total Plays:</string>
+    <string name="total_time_string">Total Time:</string>
+    <string name="reset_stats">Reset Statistics</string>
 
 </resources>

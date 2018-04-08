@@ -13,6 +13,12 @@ public class AcePile extends Pile {
         super(testVar);
     }
 
+    /**
+     * Valid next card is an Ace if empty, and a card with same suit but one greater number if not empty
+     *
+     * @param m movement to check
+     * @return true if can be placed, false otherwise
+     */
     public boolean validNextCard(Movement m) {
         Card last = getLast();
         Card c = m.getBase();
@@ -21,6 +27,10 @@ public class AcePile extends Pile {
                 && m.getBelow().size() == 1;
     }
 
+    /**
+     * Add cards to deck from movement. Adds ontop of other cards
+     * @param m movement
+     */
     public void addCards(Movement m) {
         float[] base = getCoords();
         for (Card c: m.getBelow()) {
@@ -29,16 +39,28 @@ public class AcePile extends Pile {
         }
     }
 
+    /**
+     * Gets the top card in the deck
+     * @param c Card to look for
+     * @return
+     */
     public ArrayList<Card> getAfter(Card c) {
         below.clear();
         below.add(c);
         return below;
     }
 
+    /**
+     * Does nothing because ace piles cannot be flipped
+     */
     public void flipLast() {
         // do nothing
     }
 
+    /**
+     * Checks to see if King is last card in deck
+     * @return true of king is last card, false otherwise
+     */
     public boolean isComplete() {
         Card last = getLast();
         return last != null && getLast().num == Deck.KING;

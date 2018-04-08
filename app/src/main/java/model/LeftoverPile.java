@@ -64,6 +64,7 @@ public class LeftoverPile extends Pile {
             c.setX(xy[0]);
             c.setY(xy[1]);
         }
+        numLeft = size();
     }
 
     /**
@@ -76,6 +77,7 @@ public class LeftoverPile extends Pile {
             c.setXY(base[0] - Card.size_x * 1.5f, base[1]);
             addCard(c);
         }
+
     }
 
     /**
@@ -83,7 +85,6 @@ public class LeftoverPile extends Pile {
      */
     public void flipLast() {
         incPile();
-
     }
 
     /**
@@ -145,6 +146,11 @@ public class LeftoverPile extends Pile {
             return c;
         }
         return null;
+    }
+
+    public void setupPile() {
+        numLeft = size();
+        incPile();
     }
 
 }

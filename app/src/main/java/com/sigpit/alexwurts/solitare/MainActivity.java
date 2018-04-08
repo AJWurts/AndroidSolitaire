@@ -18,6 +18,7 @@ import model.Deck;
 public class MainActivity extends AppCompatActivity {
 
     SolitareCanvas canvas;
+    Statistics stats;
     PopupWindow popupWindow;
     Button closePopUp;
     Button yes;
@@ -30,9 +31,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        stats = new Statistics(
+                getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE),
+                this);
         canvas = findViewById(R.id.surfaceView);
-        canvas.setup(this, deckSaver);
+        canvas.setup(this, deckSaver, stats);
+        stats.getStats();
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        stats.save();
     }
 
     @Override
@@ -44,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
         setup = true;
     }
 
+    public void stopGame(View v) {
+        canvas.finishGame();
+    }
 
     /**
      * Displays Solitaire on the canvas
@@ -87,9 +101,9 @@ public class MainActivity extends AppCompatActivity {
         // Sets TextView Values to correct values
         TextView timeValue = customView.findViewById(R.id.timeValue);
         TextView movesValue = customView.findViewById(R.id.movesValue);
+        ConstraintLayout background = customView.findViewById(R.id.winBackground);
 //        TextView totalMovesValue = customView.findViewById(R.id.totalPlaysValue);
 
-        Statistics stats = canvas.getStats();
 
         timeValue.setText(stats.getReadableTime());
         movesValue.setText(stats.getCurrentMovesAsString());
@@ -103,12 +117,21 @@ public class MainActivity extends AppCompatActivity {
                 isPopupOpen = false;
             }
         });
+
+        // Makes background back button to
+        background.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+                isPopupOpen = false;
+            }
+        });
+
     }
 
     /**
      * Popup window for restart so it the user cant restart automatically
-     *
-     * @param v
+     * @param v unused
      */
     public void handleRestart(View v) {
         if (isPopupOpen) {
@@ -120,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
         yes = customView.findViewById(R.id.yesButton);
         no = customView.findViewById(R.id.noButton);
         ConstraintLayout window = findViewById(R.id.popupLayout);
-
+        ConstraintLayout background = customView.findViewById(R.id.restartBackground);
 
         popupWindow = new PopupWindow(customView,
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -143,5 +166,15 @@ public class MainActivity extends AppCompatActivity {
                 isPopupOpen = false;
             }
         });
+
+        background.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+                isPopupOpen = false;
+            }
+        });
     }
+
+
 }

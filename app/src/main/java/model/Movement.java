@@ -3,7 +3,9 @@ package model;
 import java.util.ArrayList;
 import java.util.Collection;
 
-
+/**
+ * Used for moving groups of cards between piles
+ */
 public class Movement {
     private Card orig;
     private ArrayList<Card> below = new ArrayList<>();
@@ -15,6 +17,12 @@ public class Movement {
         this.origPileIndex = origPileIndex;
     }
 
+    /**
+     * Moves the selected cards
+     *
+     * @param xDiff x distance moved
+     * @param yDiff y distance moved
+     */
     public void move(float xDiff, float yDiff) {
         float[] old;
         for (Card c: below) {
@@ -23,19 +31,35 @@ public class Movement {
         }
     }
 
+    /**
+     * Gets the cards below the top card
+     * @return returns collection of cards below
+     */
     public Collection<Card> getBelow() {
         return below;
     }
 
-    // Getters and Setters
+    /**
+     * Returns original pile index
+     * @return int of original pile
+     */
     public int getOrigPileIndex() {
         return origPileIndex;
     }
 
+    /**
+     * Sets original pile index
+     * @param origPileIndex new original pile index
+     */
     public void setOrigPileIndex(int origPileIndex) {
         this.origPileIndex = origPileIndex;
     }
 
+    /**
+     * Sets XY coordinates of movement while giving adjusting placement
+     * @param x new x coordinate
+     * @param y new y coordinate
+     */
     public void setXY(float x, float y) {
         for (Card c : below) {
             y += Card.size_y * 0.3;
@@ -43,6 +67,10 @@ public class Movement {
         }
     }
 
+    /**
+     * Returns base card
+     * @return base card
+     */
     public Card getBase() {
         return orig;
     }

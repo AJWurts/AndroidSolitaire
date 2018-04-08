@@ -24,7 +24,7 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
     private boolean down = false;
     private float[] initXY = new float[2];
     private float[] originXY = new float[2];
-    private Statistics stats = new Statistics();
+    private Statistics stats;
 
 
     public SolitareCanvas(Context context) {
@@ -126,9 +126,7 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
                         stats.incMoves();
                     }
                     if (deck.hasFinished()) {
-                        isSolitaireLoaded = false;
-                        stats.endTimer();
-                        main.openFinishedWindow(new View(getContext()));
+                        finishGame();
                     }
                 }
 
@@ -149,7 +147,8 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
      *
      * @param main Connection to main activity
      */
-    public void setup(MainActivity main, Deck deck) {
+    public void setup(MainActivity main, Deck deck, Statistics stats) {
+        this.stats = stats;
         this.main = main;
         this.deck = deck;
         getHolder().addCallback(this);
@@ -263,5 +262,14 @@ public class SolitareCanvas extends SurfaceView implements SurfaceHolder.Callbac
     public void setDeck(Deck deck) {
         isSolitaireLoaded = true;
         this.deck = deck;
+    }
+
+    /**
+     * Finishes game for debugging
+     */
+    public void finishGame() {
+        isSolitaireLoaded = false;
+        stats.endTimer();
+        main.openFinishedWindow(new View(getContext()));
     }
 }

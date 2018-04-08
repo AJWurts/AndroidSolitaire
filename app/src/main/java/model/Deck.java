@@ -241,7 +241,7 @@ public class Deck {
                     cY - size_y * 1.5f);
         }
         // Flips over top card in pile
-        ((LeftoverPile)piles.get(7)).incPile();
+        ((LeftoverPile) piles.get(7)).setupPile();
 
     }
 
