@@ -78,6 +78,11 @@ public class Statistics {
         editor.apply();
     }
 
+    private void uploadScores() {
+//        LeaderboardsClient client = new Games.getLeaderboardsClient(main.getApplicationContext(), GoogleSignInAccount.)
+//                .submitScore(main.getString(R.string.leaderboard_lowest_moves), )
+    }
+
     public String getReadableTime() {
         long currentTime = System.currentTimeMillis() - startTime;
         currentTime /= 1000;

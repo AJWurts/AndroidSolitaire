@@ -119,6 +119,17 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
 
+            <TextView
+                android:id="@+id/accountInfo"
+                android:layout_width="108dp"
+                android:layout_height="46dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/resetStatsButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
             <Button
                 android:id="@+id/resetStatsButton"
                 android:layout_width="match_parent"
@@ -133,6 +144,21 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
+
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/playServicesLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:onClick="signIn"
+                android:text="Google Play Login"
+                app:layout_constraintBottom_toTopOf="@+id/resetStatsButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+            </com.google.android.gms.common.SignInButton>
         </android.support.constraint.ConstraintLayout>
 
     </LinearLayout>
