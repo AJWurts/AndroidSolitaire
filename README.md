@@ -1,5 +1,4 @@
-# Solitaire
-# by Alexander Wurts
+# Solitaire by Alexander Wurts
 
 # Google Play Store Link: https://play.google.com/store/apps/details?id=com.sigpit.alexwurts.solitare
 
